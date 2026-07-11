@@ -1,7 +1,7 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from django.shortcuts import render
 from .form import UserForm
 
@@ -65,3 +65,16 @@ def login_view(request):
 
     return render(request, 'auth/login_form.html', {'form': login_form})
 
+
+# Forgot password
+def changepassword(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            change_pass_form = PasswordChangeForm(user=request.user, data=request.POST)
+            if change_pass_form.is_valid():
+                change_pass_form.save()
+                update_session_auth_hash(request, change_pass_form.user)
+                return render(request, 'auth/forgot_pass_success.html')
+        else:
+            change_pass_form = PasswordChangeForm(user=request.user)
+    return render(request, 'auth/forgot_pass.html')
