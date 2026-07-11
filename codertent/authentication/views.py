@@ -11,6 +11,18 @@ def welcome(request):
 
 def register(request):
 
+    # on post request
     if request.method == 'POST':
         register_form = UserForm(request.POST)
+        if register_form.is_valid():
+            register_form.save()
+            return render(request, 'register/register_success.html')
+
+        else:
+            register_form = UserForm()
+
+     # on get request
+    else:
+        register_form = UserForm()
+
     return render(request, 'register/register_form.html', {'register_form': register_form})
