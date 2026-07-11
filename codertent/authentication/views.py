@@ -10,6 +10,7 @@ def welcome(request):
     return HttpResponse("Welcome to CoderTent!")
 
 
+
 # auth with UserForm
 def register(request):
     # on post request
@@ -27,6 +28,7 @@ def register(request):
         register_form = UserForm()
 
     return render(request, 'auth/register_form.html', {'register_form': register_form})
+
 
 
 # signup with UserCreationForm
@@ -48,6 +50,7 @@ def signup(request):
     return render(request, 'auth/register_form.html', {'register_form': signup_form})
 
 
+
 # login
 def login_view(request):
     if request.method == 'POST':
@@ -66,15 +69,17 @@ def login_view(request):
     return render(request, 'auth/login_form.html', {'form': login_form})
 
 
-# Forgot password
-def changepassword(request):
+
+# Change password
+def changepass(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             change_pass_form = PasswordChangeForm(user=request.user, data=request.POST)
             if change_pass_form.is_valid():
                 change_pass_form.save()
                 update_session_auth_hash(request, change_pass_form.user)
-                return render(request, 'auth/forgot_pass_success.html')
+                return render(request, 'auth/change_pass_success.html')
         else:
             change_pass_form = PasswordChangeForm(user=request.user)
-    return render(request, 'auth/forgot_pass.html')
+            return render(request, 'auth/change_pass.html', {'form': change_pass_form})
+    return render(request, 'auth/change_pass.html', {'form': change_pass_form})
