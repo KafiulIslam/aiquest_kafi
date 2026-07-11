@@ -8,6 +8,7 @@ class UserForm(UserCreationForm):
         model = User
         fields = ['email', 'first_name', 'last_name', 'password1', 'password2']
 
+    # checking, is the email already used for any account or not
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():

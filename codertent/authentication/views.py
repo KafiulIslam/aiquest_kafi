@@ -9,8 +9,8 @@ def welcome(request):
     return HttpResponse("Welcome to CoderTent!")
 
 
+# register with UserForm
 def register(request):
-
     # on post request
     if request.method == 'POST':
         register_form = UserForm(request.POST)
@@ -21,8 +21,27 @@ def register(request):
         else:
             register_form = UserForm()
 
-     # on get request
+    # on get request
     else:
         register_form = UserForm()
 
     return render(request, 'register/register_form.html', {'register_form': register_form})
+
+
+# signup with UserCreationForm
+def signup(request):
+    # on post request
+    if request.method == 'POST':
+        signup_form = UserCreationForm(request.POST)
+        if signup_form.is_valid():
+            signup_form.save()
+            return render(request, 'register/register_success.html')
+
+        else:
+            signup_form = UserCreationForm(request.POST)
+
+    # on get request
+    else:
+        signup_form = UserCreationForm()
+
+    return render(request, 'register/register_form.html', {'register_form': signup_form})
